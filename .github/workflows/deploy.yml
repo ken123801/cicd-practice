@@ -1,33 +1,27 @@
-name: "Deploy Release"
+name: "Deploy"
 
 on:
   push:
     tags:
-      - 'v*'  # 只有在你推送 v1.0, v2.0 这种标签时才会触发
+      - 'v*'  # 只有在推送以 v 开头的标签（如 v1.0）时才会触发
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     container: astralapp/uv:python3.12-bookworm-slim
     
-    # 必须赋予写权限，否则 GitHub 不允许机器人创建 Release 页面
+    # 发布 Release 必须赋予这行写权限
     permissions:
       contents: write 
       
     steps:
       - name: Checkout
-        uses: actions/checkout@v4  # 💡 小提示：目前 checkout 的稳定版是 v4，你 test.yml 里的 v6 可能会报错哦
+        uses: actions/checkout@v4  
         
       - name: Install dependencies
         run: uv sync
         
-      # 如果你的项目需要打包（例如打成 .whl 文件给别人用），可以取消注释下面这两行
-      # - name: Build package
-      #   run: uv build
-        
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
-          # 如果上面执行了打包，可以通过下面的配置把生成的文件传到 Release 页面
-          # files: dist/* ```
+          generate_release_notes: true # 自动生成更新日志
