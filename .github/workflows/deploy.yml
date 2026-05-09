@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container: astralapp/uv:python3.12-bookworm-slim
+    container: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
     
     # 发布 Release 必须赋予这行写权限
     permissions:
